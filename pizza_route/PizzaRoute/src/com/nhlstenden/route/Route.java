@@ -36,6 +36,11 @@ public class Route
         this.person = person;
     }
 
+    public void addDestination(Destination destination)
+    {
+        this.destinations.add(destination);
+    }
+
     public double getSalaryPerRoute(Person person)
     {
         if (person.getAge() >= 16 && person.getAge() < 20)
@@ -50,5 +55,11 @@ public class Route
         {
             return 5.25;
         }
+    }
+
+    @Override
+    public String toString ()
+    {
+        return "Route\n" + "destinations=" + destinations + ", person=" + person;
     }
 }

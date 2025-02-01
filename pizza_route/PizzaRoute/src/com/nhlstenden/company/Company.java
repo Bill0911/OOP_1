@@ -8,6 +8,7 @@ import com.sun.jdi.Value;
 import javax.management.ValueExp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Company
 {
@@ -27,6 +28,11 @@ public class Company
     public void setRoutes (List<Route> routes)
     {
         this.routes = routes;
+    }
+
+    public void addRoute(Route route)
+    {
+        this.routes.add(route);
     }
 
     public double getTotalSalaryForAllDriver()
@@ -178,5 +184,26 @@ public class Company
         }
 
         return shortestRoute;
+    }
+
+    public List<Route> getTop3LongestRoutesWithMostPizzas()
+    {
+        if (this.routes.isEmpty())
+        {
+            return new ArrayList<>();
+        }
+
+        return this.routes.stream()
+                .sorted((route1, route2) -> {
+                    int distanceComparison = Integer.compare(getTotalDistanceOfEachRoute(route2), getTotalDistanceOfEachRoute(route1));
+                    if (distanceComparison != 0) {
+                        return distanceComparison;
+                    }
+                    int pizzas1 = route1.getDestinations().stream().mapToInt(Destination::getAmountOfPizzas).sum();
+                    int pizzas2 = route2.getDestinations().stream().mapToInt(Destination::getAmountOfPizzas).sum();
+                    return Integer.compare(pizzas2, pizzas1);
+                })
+                .limit(3)
+                .collect(Collectors.toList());
     }
 }

@@ -54,4 +54,10 @@ public class Destination
     {
         this.amountOfPizzas = amountOfPizzas;
     }
+
+    @Override
+    public String toString ()
+    {
+        return "Destination\n" + "name='" + name + '\'' + ", address='" + address + '\'' + ", distanceFromTheLastDestination=" + distanceFromTheLastDestination + ", amountOfPizzas=" + amountOfPizzas + "\n";
+    }
 }

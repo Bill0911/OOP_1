@@ -3,10 +3,13 @@ package com.nhlstenden.company;
 import com.nhlstenden.destination.Destination;
 import com.nhlstenden.person.Person;
 import com.nhlstenden.route.Route;
+import com.nhlstenden.topThreeLongestRoute.TopThreeLongestRoute;
 import com.sun.jdi.Value;
 
 import javax.management.ValueExp;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Formattable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -206,4 +209,39 @@ public class Company
                 .limit(3)
                 .collect(Collectors.toList());
     }
+
+    public TopThreeLongestRoute getTopThreeLongestRoutesWithMostPizzas()
+    {
+        List<Route> sortedRoutes = this.routes.stream()
+                .sorted((route1, route2) -> {
+                    int distanceComparison = Integer.compare(getTotalDistanceOfEachRoute(route2), getTotalDistanceOfEachRoute(route1));
+                    if (distanceComparison != 0) {
+                        return distanceComparison;
+                    }
+                    int pizzas1 = route1.getDestinations().stream().mapToInt(Destination::getAmountOfPizzas).sum();
+                    int pizzas2 = route2.getDestinations().stream().mapToInt(Destination::getAmountOfPizzas).sum();
+                    return Integer.compare(pizzas2, pizzas1);
+                })
+                .collect(Collectors.toList());
+
+        Route top1 = sortedRoutes.size() > 0 ? sortedRoutes.get(0) : null;
+        Route top2 = sortedRoutes.size() > 1 ? sortedRoutes.get(1) : null;
+        Route top3 = sortedRoutes.size() > 2 ? sortedRoutes.get(2) : null;
+
+        return new TopThreeLongestRoute(top1, top2, top3);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
